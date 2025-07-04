@@ -1,7 +1,15 @@
-# Prerequisites
-*.d
+# Build system
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
 
-# Compiled Object files
+# Code généré automatiquement
+generated/
+
+# Object files
+*.d
 *.slo
 *.lo
 *.o
@@ -11,31 +19,30 @@
 *.gch
 *.pch
 
-# Linker files
-*.ilk
-
-# Debugger Files
+# Debugger
 *.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+*.ilk
+*.dwo
 
 # Executables
 *.exe
 *.out
 *.app
 
-# debug information files
-*.dwo
+# Libraries
+*.so
+*.dylib
+*.dll
+*.lai
+*.la
+*.a
+*.lib
+
+# Fortran modules
+*.mod
+*.smod
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
