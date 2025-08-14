@@ -4,6 +4,7 @@
 #include <vector>
 #include <cctype>
 #include "meta/meta_ast.h"
+#include <map>
 using namespace std;
 
 Node::Node(const Atom& a)
@@ -47,6 +48,7 @@ string arbreToString(const Node* node) {
     }
     return "";
 }
+
 
 
 /*méta-grammaire hard-codé*/
@@ -103,3 +105,11 @@ shared_ptr<Node> F = make_shared<Node>(NodeKind::UNION_NODE,
                         make_shared<Node>(Atom{"(/", 0, AtomType::Terminal}), 
                         make_shared<Node>(Atom{"E", 0, AtomType::Non_Terminal})),
                     make_shared<Node>(Atom{"/)", 7, AtomType::Terminal}))))));
+
+unordered_map<string, shared_ptr<Node>> metaGrammarRules = {
+    {"S", S},
+    {"N", N},
+    {"E", E},
+    {"T", T},
+    {"F", F}
+};

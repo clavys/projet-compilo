@@ -17,6 +17,7 @@ add_executable(main
     src/meta/meta_lexer.cpp
     src/meta/meta_parser.cpp
     src/meta/meta_ast.cpp
+    src/meta/meta_ast_builder.cpp
 
 )
 
@@ -25,7 +26,9 @@ add_executable(test_meta_parser
     tests/test_meta_parser.cpp
 
     # Meta
+    src/meta/meta_ast_builder.cpp
     src/meta/meta_ast.cpp
     src/meta/meta_lexer.cpp
     src/meta/meta_parser.cpp
+    
 )

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 // Enumération pour différencier les types d'atomes
 enum class AtomType { Terminal, Non_Terminal };
@@ -15,12 +16,12 @@ struct Atom {
     AtomType type;
 };
 
-// Enumération pour identifier le type de nœud
+// Enumération pour identifier le type de noeud
 enum class NodeKind {
     ATOM, CONCATENATION, UNION_NODE, STAR, UN
 };
 
-// Structure de l'arbre syntaxique utilisant des shared_ptr
+// Structure de l'arbre syntaxique
 struct Node {
     NodeKind kind;
     Atom atom; // Utilisé seulement si kind == ATOM
@@ -41,6 +42,11 @@ struct Node {
 // Fonction utilitaire pour convertir l'arbre en chaîne de caractères
 std::string arbreToString(const Node* node);
 
-extern std::shared_ptr<Node> S;
+
+
+// Déclaration de la méta-grammaire
+extern std::unordered_map<std::string, std::shared_ptr<Node>> metaGrammarRules;
+
+
 
 #endif // META_AST_H

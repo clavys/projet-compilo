@@ -5,8 +5,8 @@
 namespace meta {
 
 enum class TokenType {
-    Identifier,      // Ex: N, E, F
-    Terminal,        // Ex: ELTER, IDNTER
+    Identifier,      // Ex: N, E1, a, b, etc.
+    Terminal,        // Ex: 'ELTER', 'IDNTER', 'a1', 'b2', etc.
     Arrow,           // ->
     Pipe,            // |
     Star,            // *
@@ -19,6 +19,7 @@ enum class TokenType {
     SlashClose,      // /)
     Comma,           // ,
     Semicolon,       // ;
+    Dot,             // .
     EndOfFile,       // EOF
     Unknown          // Anything non reconnu
 };
@@ -26,13 +27,14 @@ enum class TokenType {
 struct Token {
     TokenType type;
     std::string value;
+    int action; // Code d'action associé au token
     int line;
     int column;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Token& t) {
-    return os << "\"" << t.value << "\", " << t.line << ":" << t.column << ")";
+    return os << "\"" << t.value << "\", actionCode : " <<t.action<< " , "<<t.line << ":" << t.column << "";
               
 }
 
-} // namespace meta
+}

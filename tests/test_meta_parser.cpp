@@ -2,27 +2,34 @@
 #include <fstream>
 #include <vector>
 #include <string>
-// Update the path below if "token.hpp" is located elsewhere
+#include <filesystem>
 #include "meta/token.hpp"
 #include "meta/meta_lexer.hpp"
+#include "meta/meta_parser.hpp"
 using namespace meta;
 
 int main() {
-    std::ifstream input("../grammars/base_lang.gram");
-    if (!input.is_open()) {
-        std::cerr << "Erreur : impossible d'ouvrir base_lang.gram\n";
-        return 1;
-    }
+    Logger logger;                  // Crée un logger global pour le test
+    logger.setLevel(Logger::Level::Error); // Active le debug si tu veux
 
-    std::string source((std::istreambuf_iterator<char>(input)),
-                       std::istreambuf_iterator<char>());
+    namespace fs = std::filesystem;
+    for (const auto& file : fs::directory_iterator("../grammars")) {
+        if (file.path().extension() == ".gram") {
+            std::cout << "\n=== Test fichier : " << file.path().filename() << " ===\n";
+            std::ifstream input(file.path());
+            std::string source((std::istreambuf_iterator<char>(input)),
+                               std::istreambuf_iterator<char>());
 
-    MetaLexer lexer(source);
-    std::vector<Token> tokens = lexer.tokenize();
+            try {
+                MetaLexer lexer(source);
+                auto tokens = lexer.tokenize();
+                MetaParser parser(tokens, logger); // Passe le logger au parser
 
-    std::cout << "Tokens extraits :\n";
-    for (const auto& tok : tokens) {
-        std::cout << tok << '\n';
+                parser.generateGrammarAST();
+            } catch (const std::exception& e) {
+                logger.error("Erreur dans " + file.path().filename().string() + " : " + e.what());
+            }
+        }
     }
 
     return 0;
