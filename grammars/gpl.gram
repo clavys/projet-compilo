@@ -1,0 +1,61 @@
+Program -> [ Statement . ';' ] . 'EOF',
+
+Statement -> PrintStmt + VarDecl + Assignment +  FuncDecl  + IfStmt#104 + WhileStmt +  ExprStmt,       
+
+ExprStmt    ->   CallExpr#125 + LogicalOr,   
+
+VarDecl -> 'var' . 'ID'#1 . '=' . ExprStmt#2 ,
+
+Assignment -> 'ID'#4 . '=' . ExprStmt#2,
+
+Primary -> ( '(' . LogicalOr . ')' ) + Literal,               
+
+CallExpr   -> 'IDFONCTION'#126 . [ '(' . [ ExprStmt . [ ',' . ExprStmt ] ] . ')' ] ,
+
+LogicalOr        -> LogicalAnd . [ '||' . LogicalAnd#40 ] ,
+
+LogicalAnd       -> Equality . [ '&&' . Equality#41 ] ,
+
+Equality         -> Relational . [ ( '==' .  Relational#42 ) + ( '!=' .  Relational#43 ) ]  ,
+
+Relational       -> AddExpr . [ ( '<' . AddExpr#44 ) + ( '>' . AddExpr#45 ) + ( '<=' . AddExpr#46 ) + ( '>=' . AddExpr#47 ) ] ,    
+
+AddExpr          -> MulExpr . [ ( '+' .  MulExpr#30 ) + ( '-' .  MulExpr#31 ) ] ,
+
+MulExpr          -> Unary . [ ( '*' . Unary#32 ) + ( '/' . Unary#33)  +  ('%' . Unary#34 ) ]  ,
+
+Unary            ->  ( '!' . Primary#10 ) + ( '-' . Primary#11 ) + Primary,
+
+Literal          -> 'ID'#3 + ListStatement + ListOp#65 + NumberLiteral + StringLiteral + Bool + ListLiteral + CallExpr#125,
+
+NumberLiteral    -> 'NUMBER'#20 ,
+
+StringLiteral    -> 'STRING'#21 ,
+
+Bool -> 'true'#22 + 'false'#23,
+
+IfStmt -> 'if' . '(' . LogicalOr#100 . ')' . Block#101 . (/ Else /) ,
+
+Else -> 'else'#102 . Block#103 ,
+
+WhileStmt -> 'while'#110 . '(' . LogicalOr#111 . ')' . Block#112 ,
+
+Block -> '{' . [ Statement . ';' ] . '}' ,
+
+
+FuncDecl   -> 'function' . 'IDFONCTION'#120 . '(' . [ 'ID'#121 . [ ',' . 'ID'#121 ] ] . ')' . FuncBlock#123  ,
+
+FuncBlock -> '{'#122 . [ Statement . ';' ] . (/ ReturnStmt /) .'}' ,
+
+ReturnStmt -> 'return' . LogicalOr#124 . ';' ,
+
+
+PrintStmt -> ('print' . LogicalOr#90 ) + ('println' . LogicalOr#91 ),
+          
+ListLiteral      -> ( 'makeEmpty' . '(' . ExprStmt#66 . ')' ) + ( '['#60 . [ LogicalOr#61 . [ ',' . LogicalOr#61 ] ] . ']'#62 ),
+
+ListStatement -> 'IDLIST'#3 . (/ ListIndex#64 /) ,
+
+ListOp -> 'size' . '(' . Literal . ')',
+
+ListIndex -> '[' .  LogicalOr  . ']' . (/ '=' . LogicalOr#63 /) , ;

@@ -13,11 +13,19 @@ add_executable(main
     # Main
     src/main.cpp
     
+    # ast
+    src/ast/ast.cpp
+
     # Meta
+    src/meta/meta_ast_builder.cpp
     src/meta/meta_lexer.cpp
     src/meta/meta_parser.cpp
-    src/meta/meta_ast.cpp
-    src/meta/meta_ast_builder.cpp
+
+    # compilo
+    src/compilo/lexer.cpp
+    src/compilo/parser.cpp
+    src/compilo/pcodegen.cpp
+    src/compilo/runtime.cpp
 
 )
 
@@ -25,10 +33,52 @@ add_executable(test_meta_parser
     # Tests
     tests/test_meta_parser.cpp
 
+    # ast
+    src/ast/ast.cpp
+
+    # Meta
+    src/meta/meta_ast_builder.cpp
+    src/meta/meta_lexer.cpp
+    src/meta/meta_parser.cpp
+    
+)
+
+add_executable(test_parser
+    # Tests
+    tests/test_parser.cpp
+
+    # ast
+    src/ast/ast.cpp
+
+    # Meta
+    src/meta/meta_ast_builder.cpp
+    src/meta/meta_lexer.cpp
+    src/meta/meta_parser.cpp
+
+    # compilo
+    src/compilo/lexer.cpp
+    src/compilo/parser.cpp
+    src/compilo/pcodegen.cpp
+    
+    
+)
+
+
+add_executable(test_runtime
+    # Tests
+    tests/test_runtime.cpp
+
     # Meta
     src/meta/meta_ast_builder.cpp
     src/meta/meta_ast.cpp
     src/meta/meta_lexer.cpp
     src/meta/meta_parser.cpp
+
+    # compilo
+    src/compilo/lexer.cpp
+    src/compilo/parser.cpp
+    src/compilo/pcodegen.cpp
+    src/compilo/runtime.cpp
+    
     
 )

@@ -1,0 +1,98 @@
+function merge(arr, left, mid, right) {
+    var leftSize = mid - left;
+    var rightSize = right - mid;
+    var leftArr = makeEmpty(leftSize);
+    var rightArr = makeEmpty(rightSize);
+  
+    var i = 0;
+    while (i < leftSize) {
+        leftArr[i] = arr[left + i];
+        i = i + 1;
+    };
+    
+    i = 0;
+    while (i < rightSize) {
+        rightArr[i] = arr[mid + i];
+        i = i + 1;
+    };
+    
+    i = 0;
+    var j = 0;
+    var k = left;
+    
+    while (i < leftSize && j < rightSize) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i = i + 1;
+        } else {
+            arr[k] = rightArr[j];
+            j = j + 1;
+        };
+        k = k + 1;
+    };  
+
+    while (i < leftSize) {
+        arr[k] = leftArr[i];
+        i = i + 1;
+        k = k + 1;
+    };
+
+    while (j < rightSize) {
+        arr[k] = rightArr[j];
+        j = j + 1;
+        k = k + 1;
+    };
+
+};
+
+function mergeSort(arr) {
+    var n = size(arr);
+    var width = 1;
+    
+    while (width < n) {
+        var left = 0;
+        while (left < n - 1) {
+            var mid = left + width;
+            var right = left + width * 2;
+            if (mid >= n) {mid = n;};
+            if (right >= n) {right = n;};
+            
+            merge(arr, left, mid, right);
+            left = left + width * 2;
+        };
+        width = width * 2;
+    };
+    return arr;
+};
+
+function printArray(arr) {
+    var i = 0;
+    var n = size(arr);
+    
+    print("[");
+    while (i < n) {
+        print(arr[i]);
+        if (i < n - 1) {
+            print(", ");
+        };
+        i = i + 1;
+    };
+    println("]");
+};
+
+println "avant tri";
+var montableau = [2,6,125,5,4,-56,26,35,158,32,5,99,74,1,45,95];
+printArray(montableau);
+println "apres tri";
+printArray(mergeSort(montableau));
+
+
+
+      
+
+
+        
+
+        
+
+       

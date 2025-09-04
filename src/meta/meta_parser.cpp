@@ -23,7 +23,7 @@ bool MetaParser::analyse(const std::shared_ptr<Node>& node, std::vector<meta::To
             const meta::Token& current = (*tokens)[*index];
 
             if (node->atom.type == AtomType::Terminal) {
-                logger.debug("ATOM (TERMINAL) : ", node->atom.code, " step ", stepId);
+                logger.debug("ATOM (TERMINAL) : ", node->atom.code," token : ",current, " step ", stepId);
 
                 if ((node->atom.code == current.value) ||
                     (node->atom.code == "IDNTER" && current.type == meta::TokenType::Identifier) ||
@@ -33,6 +33,7 @@ bool MetaParser::analyse(const std::shared_ptr<Node>& node, std::vector<meta::To
                         builder.applyAction(node->atom.action, current);
 
                     (*index)++;
+                    
                     success = true;
                 }
             } else {
@@ -71,6 +72,11 @@ bool MetaParser::analyse(const std::shared_ptr<Node>& node, std::vector<meta::To
             logger.debug("UN : " , stepId);
             analyse(node->sub, tokens, index);
             success = true;
+            break;
+
+        case NodeKind::GROUP:
+            logger.debug("GROUP : " , stepId);
+            success = analyse(node->sub, tokens, index);
             break;
     }
 

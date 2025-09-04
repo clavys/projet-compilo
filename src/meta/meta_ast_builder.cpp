@@ -8,7 +8,7 @@ void ASTBuilder::applyAction(int action, const meta::Token& token) {
         case 0:
             break;
 
-        case 1: // Lier une règle à un arbre
+        case 1: // Lier une regle à un arbre
             logger.debug("action 1 : liaison dans l'AST");
             if (!stack.isEmpty()) { t1 = stack.top(); stack.pop(); }
             if (!stack.isEmpty()) { t2 = stack.top(); stack.pop(); }
@@ -74,6 +74,12 @@ void ASTBuilder::applyAction(int action, const meta::Token& token) {
             if (t1) stack.push(std::make_shared<Node>(NodeKind::UN, t1));
             break;
 
+        case 8: // GROUP
+            logger.debug("action 8 : groupe (GROUP)");
+            if (!stack.isEmpty()) { t1 = stack.top(); stack.pop(); }
+            if (t1) stack.push(std::make_shared<Node>(NodeKind::GROUP, t1));
+            break;    
+
         default:
             std::cerr << "Erreur: code d'action inconnu : " << action << std::endl;
             break;
@@ -110,6 +116,11 @@ void ASTBuilder::printAST(const std::shared_ptr<Node>& node, int indent) const {
 
         case NodeKind::UN:
             std::cout << "OPTIONAL\n";
+            printAST(node->sub, indent + 1);
+            break;
+
+        case NodeKind::GROUP:
+            std::cout << "GROUP\n";
             printAST(node->sub, indent + 1);
             break;
     }

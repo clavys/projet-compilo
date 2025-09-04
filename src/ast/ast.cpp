@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <cctype>
-#include "meta/meta_ast.h"
+#include "ast/ast.h"
 #include <map>
 using namespace std;
 
@@ -49,6 +49,40 @@ string arbreToString(const Node* node) {
     return "";
 }
 
+void printAST(const std::shared_ptr<Node>& node, int indent)  {
+    if (!node) return;
+    for (int i = 0; i < indent; ++i) std::cout << "  ";
+
+    switch (node->kind) {
+        case NodeKind::ATOM:
+            std::cout << "ATOM: " 
+                      << (node->atom.type == AtomType::Terminal ? "'" + node->atom.code + "'" : node->atom.code)
+                      << " (action=" << node->atom.action << ")\n";
+            break;
+
+        case NodeKind::CONCATENATION:
+            std::cout << "CONCATENATION\n";
+            printAST(node->left, indent + 1);
+            printAST(node->right, indent + 1);
+            break;
+
+        case NodeKind::UNION_NODE:
+            std::cout << "UNION\n";
+            printAST(node->left, indent + 1);
+            printAST(node->right, indent + 1);
+            break;
+
+        case NodeKind::STAR:
+            std::cout << "STAR\n";
+            printAST(node->sub, indent + 1);
+            break;
+
+        case NodeKind::UN:
+            std::cout << "OPTIONAL\n";
+            printAST(node->sub, indent + 1);
+            break;
+    }
+}
 
 
 /*méta-grammaire hard-codé*/
@@ -93,7 +127,7 @@ shared_ptr<Node> F = make_shared<Node>(NodeKind::UNION_NODE,
                 make_shared<Node>(NodeKind::CONCATENATION, 
                     make_shared<Node>(Atom{"(", 0, AtomType::Terminal}), 
                     make_shared<Node>(Atom{"E", 0, AtomType::Non_Terminal})), 
-                make_shared<Node>(Atom{")", 0, AtomType::Terminal})),
+                make_shared<Node>(Atom{")", 8, AtomType::Terminal})),
             make_shared<Node>(NodeKind::UNION_NODE, 
                 make_shared<Node>(NodeKind::CONCATENATION, 
                     make_shared<Node>(NodeKind::CONCATENATION,
