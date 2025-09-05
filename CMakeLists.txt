@@ -68,9 +68,11 @@ add_executable(test_runtime
     # Tests
     tests/test_runtime.cpp
 
+    # ast
+    src/ast/ast.cpp
+
     # Meta
     src/meta/meta_ast_builder.cpp
-    src/meta/meta_ast.cpp
     src/meta/meta_lexer.cpp
     src/meta/meta_parser.cpp
 
