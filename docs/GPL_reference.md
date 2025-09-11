@@ -7,7 +7,6 @@
 var x = 10;
 var name = "hello world";
 var flag = true;
-var empty;
 ```
 
 ### Types Supportés
@@ -391,7 +390,7 @@ Les commentaires ne sont pas supportés dans cette version du langage.
 - Types supportés : number, string, boolean, list
 
 ### Structures de Données
-- Listes seulement (pas d'objets ou de structures)
+- Listes static seulement (pas d'objets ou de structures)
 
 ### Contrôle de Flux
 - Pas de boucle `for`
