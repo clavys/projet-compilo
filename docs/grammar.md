@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Ce guide explique le système de grammaires à deux niveaux de votre compilateur. Chaque niveau a son rôle spécifique dans l'architecture de compilation :
+Ce guide explique le système de grammaires à deux niveaux du compilateur. Chaque niveau a son rôle spécifique dans l'architecture de compilation :
 
 | Niveau | Format | Exemple | Usage |
 |--------|--------|---------|--------|
@@ -23,7 +23,7 @@ Méta-grammaire hardcodée (C++) ←→ g0.gram (même système, format textuel)
 
 ### Nature de la Méta-Grammaire
 
-La **méta-grammaire** est le système hardcodé dans votre classe AST (`ast/ast.h`) qui permet au méta-compilateur de parser **n'importe quelle grammaire**. C'est le niveau le plus fondamental qui définit les règles universelles de construction grammaticale.
+La **méta-grammaire** est le système hardcodé dans la classe AST (`ast/ast.h`) qui permet au méta-compilateur de parser **n'importe quelle grammaire**. C'est le niveau le plus fondamental qui définit les règles universelles de construction grammaticale.
 
 ```cpp
 // Dans ast/ast.h - La méta-grammaire hardcodée
@@ -156,6 +156,9 @@ Toute grammaire GPL doit respecter la syntaxe définie par la méta-grammaire :
 ### Éléments de Base
 
 #### 1. **Structure Obligatoire**
+il est essentiel que la règle d'entrée de la grammaire se termine explicitement par le token EOF (End Of File). Cette contrainte garantit que le parser valide l'intégralité du code source et ne s'arrête pas prématurément.
+
+
 ```
 Program → [ Statement . ';' ] . 'EOF' ,
 Statement → PrintStmt + VarDecl + Assignment + FuncDecl ,
@@ -252,7 +255,7 @@ FuncBlock#123        # Fin fonction → emit(POP_FRAME, FUNC_END)
 'IDFONCTION'#126     # Nom pour appel → callStack.push(name)
 ```
 
-## Grammaire GPL Complète - Votre Système
+## Grammaire GPL Complète
 
 ```
 Program → [ Statement . ';' ] . 'EOF' ,
@@ -328,13 +331,13 @@ ListIndex → '[' . LogicalOr . ']' . (/ '=' . LogicalOr#63 /) ,
 Grammaire: VarDecl → 'var' . 'ID'#1 . '=' . ExprStmt#2 ,
 Code:      var x = 10;
 Actions:   #1 (déclare x) → #20 (push 10) → #2 (store x)
-P-Code:    DECLARE_VAR x, PUSH 10, STORE x
+P-Code:    PUSH 10, STORE x
 ```
 
 ### Structure IF/ELSE avec Gestion Complexe
 ```
 Code:      if (x < 5) { y = 1; } else { y = 2; }
-Actions:   #3→#20→#44→#100→#4→#20→#2→#101→#102→#4→#20→#2→#103→#104
+Actions:   #3 → #20 → #44 → #100 → #4 → #20 → #2 → #101 → #102 → #4 → #20 → #2 → #103 → #104
 P-Code:    LOAD x, PUSH 5, LT, JUMP_IF_FALSE 8, STORE y, PUSH 1, STORE y, 
            JUMP 11, STORE y, PUSH 2, STORE y
 ```
@@ -342,8 +345,8 @@ P-Code:    LOAD x, PUSH 5, LT, JUMP_IF_FALSE 8, STORE y, PUSH 1, STORE y,
 ### Liste avec Actions Contextuelles
 ```
 Code:      var arr = [1, 2, 3]; arr[0] = 5;
-Actions:   #1→#60→#20→#61→#20→#61→#20→#61→#62→#2→#4→#20→#63→#20→#64
-P-Code:    DECLARE_VAR arr, PUSH 1, PUSH 2, PUSH 3, MAKE_LIST 3, STORE arr,
+Actions:   #1 → #60 → #20 → #61 → #20 → #61 → #20 → #61 → #62 → #2 → #4 → #20 → #63 → #20 → #64
+P-Code:    PUSH 1, PUSH 2, PUSH 3, MAKE_LIST 3, STORE arr,
            LOAD arr, PUSH 0, PUSH 5, LIST_SET
 ```
 
@@ -384,4 +387,5 @@ Statement → 'if' + 'while' ,
 2. **Ajouter la règle GPL** selon la méta-grammaire
 3. **Implémenter l'action** dans `PCodegen::applyAction()`
 4. **Tester** avec le méta-compilateur
+
 
