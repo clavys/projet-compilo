@@ -117,16 +117,11 @@ projet-compilo/
 ├── include/compilo/      # lexer, parser, runtime, pcodegen
 ├── include/meta/         # meta_lexer, meta_parser
 ├── src/                  # Implémentations C++
-├── tests/                # Tests unitaires
+├── tests/                # Test d'intégration
 └── CMakeLists.txt
 ```
 
-##  Tests et Exemples
-
-### Tests Unitaires
-```bash
-make test
-```
+##  Exemples
 
 ### Programmes d'Exemple
 - `example.mylang` : Variables, boucles, expressions
