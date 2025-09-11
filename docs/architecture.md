@@ -4,8 +4,8 @@
 
 Ce système implémente un compilateur complet avec méta-compilateur utilisant une approche par **actions sémantiques codées**. L'architecture se distingue par son système d'actions numériques (`#100`, `#200`, etc.) intégrées directement dans les grammaires.
 
-##  Architecture Globale (todo uml)
-
+##  Architecture Globale 
+> **[ UML 1 todo]**
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    MÉTA-NIVEAU                              │
@@ -39,7 +39,7 @@ Ce système implémente un compilateur complet avec méta-compilateur utilisant 
 
 ##  Exemple Concret d'Actions Sémantiques
 
-Voici un extrait de votre grammaire avec les actions intégrées :
+Voici un extrait de la grammaire avec les actions intégrées :
 
 ```
 VarDecl -> 'var' . 'ID'#1 . '=' . ExprStmt#2
@@ -53,7 +53,7 @@ WhileStmt -> 'while'#110 . '(' . LogicalOr#111 . ')' . Block#112
 FuncDecl -> 'function' . 'IDFONCTION'#120 . '(' . [ 'ID'#121 . [ ',' . 'ID'#121 ] ] . ')' . FuncBlock#123
 ```
 
-### Correspondance Actions → P-Code (Extrait de votre implémentation)
+### Correspondance Actions → P-Code (Extrait de l'implémentation)
 
 | Action | Description | P-Code Généré | Code Réel |
 |--------|-------------|---------------|-----------|
@@ -67,7 +67,7 @@ FuncDecl -> 'function' . 'IDFONCTION'#120 . '(' . [ 'ID'#121 . [ ',' . 'ID'#121 
 
 ### Structures de Contrôle Complexes
 
-**Structure IF avec votre implémentation :**
+**Structure IF :**
 ```cpp
 struct IfContext {
     size_t jumpIfFalseIndex;
@@ -176,7 +176,7 @@ class Runtime {
 
 ##  Flux de Données Détaillé
 
-> **[ UML  3 todo]** : Diagramme de séquence montrant l'interaction temporelle MetaLexer→MetaParser→ASTBuilder→Parser→PCodegen→Runtime
+> **[ UML 3 todo]** : Diagramme de séquence montrant l'interaction temporelle MetaLexer→MetaParser→ASTBuilder→Parser→PCodegen→Runtime
 
 ### Phase 1 : Méta-Compilation avec Actions
 ```
@@ -192,11 +192,11 @@ fichier.mylang → Lexer → compilo::Token[] → Parser(Node AST) → PCodegen
                                         applyAction(actionId, value) → Instruction[]
 ```
 
-**Exemple concret avec vos actions :**
+**Exemple concret avec actions :**
 ```
 Code: if (x < 5) { y = 10; }
 Tokens: [if] [(] [x] [<] [5] [)] [{] [y] [=] [10] [}]
-Actions: ε   ε   #3  #44 #20  #100 ε   #4  ε   #20  #2  #101 #104
+Actions: #3  #44 #20 #100   #4   #20  #2  #101 #104
 P-Code: LOAD x → PUSH 5 → LT → JUMP_IF_FALSE 7 → STORE y → PUSH 10 → STORE y
 ```
 
@@ -208,7 +208,7 @@ Instruction[] → Runtime → {stack<Value>, callStack<Frame>, variables<Value>}
 ##  Innovations Architecturales
 
 ### 1. **Système d'Actions Intégrées **
-Les actions sémantiques ne sont pas dans un fichier séparé mais **codées directement dans les grammaires**. Votre implémentation gère :
+Les actions sémantiques ne sont pas dans un fichier séparé mais **codées directement dans les grammaires**. l'implémentation gère :
 
 **Variables et Types :**
 - Actions #1-#4 : Déclaration, assignation, chargement
@@ -232,7 +232,7 @@ Les actions sémantiques ne sont pas dans un fichier séparé mais **codées dir
 - Actions #90-#91 : Print avec/sans newline, gestion types
 
 ### 2. **Gestion État Complexe dans PCodegen**
-Votre PCodegen maintient plusieurs piles simultanément :
+PCodegen maintient plusieurs piles simultanément :
 ```cpp
 std::stack<int> listSizeStack;        // Pour #60-#62 (listes)
 std::vector<int> rulesStack;          // Pour #63-#64 (contexte)
@@ -241,7 +241,7 @@ std::vector<IfContext> ifStack;       // Pour #100-#104 (if/else)
 ```
 
 ### 3. **Parser Récursif Universel**
-Un seul algorithme de parsing pour toutes les grammaires avec support des structures complexes de votre grammaire (répétitions, optionnels, groupements).
+Un seul algorithme de parsing pour toutes les grammaires avec support des structures complexes de la grammaire (répétitions, optionnels, groupements).
 
 ### 4. **Support Complet des Fonctions avec Frames**
 ```cpp
@@ -349,3 +349,4 @@ Pour les détails complets d'implémentation, consulter :
 - **Actions sémantiques** : `PCodegen::applyAction()` 
 - **Tokens étendus** : `include/compilo/token.hpp` et `include/meta/token.hpp`
 - **Runtime spécialisé** : `include/compilo/runtime.hpp` (+20 méthodes d'exécution)
+
