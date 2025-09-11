@@ -205,7 +205,7 @@ P-Code: LOAD x → PUSH 5 → LT → JUMP_IF_FALSE 7 → STORE y → PUSH 10 →
 Instruction[] → Runtime → {stack<Value>, callStack<Frame>, variables<Value>}
 ```
 
-##  Innovations Architecturales
+##  Caractéristiques Techniques
 
 ### 1. **Système d'Actions Intégrées **
 Les actions sémantiques ne sont pas dans un fichier séparé mais **codées directement dans les grammaires**. l'implémentation gère :
@@ -349,4 +349,5 @@ Pour les détails complets d'implémentation, consulter :
 - **Actions sémantiques** : `PCodegen::applyAction()` 
 - **Tokens étendus** : `include/compilo/token.hpp` et `include/meta/token.hpp`
 - **Runtime spécialisé** : `include/compilo/runtime.hpp` (+20 méthodes d'exécution)
+
 
